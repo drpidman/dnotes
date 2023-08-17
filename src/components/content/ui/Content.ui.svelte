@@ -12,7 +12,7 @@
                 <span><Tag/> Livros</span>
         </section>
         <section class={NoteBody}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste molestiae similique aspernatur eius consequatur nisi veniam magni, ab perferendis architecto, autem dolorem, recusandae dolores quo asperiores perspiciatis? Voluptatem, optio itaque.
+		Lorem import cascade if obj.not('selector expression')
         </section>
     </div>
 </div>

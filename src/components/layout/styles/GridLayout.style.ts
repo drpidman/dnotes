@@ -1,11 +1,8 @@
 import { css } from '@emotion/css';
 
 export const GridLayout = css`
-	display: grid;
-	grid-template-areas:
-		'aside aside content content'
-		'aside aside content content';
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
 	overflow: hidden;
-
-	gap: 1.5rem;
 `;

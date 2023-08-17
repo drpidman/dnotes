@@ -2,8 +2,9 @@ import { css } from "@emotion/css";
 
 export const Content = css`
     grid-area: content;
-    width: 100vh;
+    width: 100%;
     display: flex;
+    align-items: center;
     flex-direction: column;
     padding: 1.9rem 0 0 0;
     height: -webkit-fill-available;
@@ -22,7 +23,7 @@ export const Note = css`
     display: flex;
     flex-direction: column;
 
-    width: 100%;
+    width: 95%;
     transition: all 200ms ease-in-out;
 
     cursor: pointer;

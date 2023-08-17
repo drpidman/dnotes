@@ -8,15 +8,18 @@ export const WindowTop = css`
     padding: .9rem 0;
     width: 100%;
     background-color: var(--primary-color);
+    border-bottom: 1px dotted var(--third-color-shadow);
     z-index: 1;
-`
+`;
 
 export const WindowTitle = css`
     padding: 0 1.5rem;
-`
+`;
 
 export const WindowActions = css`
     display: flex;
+    width: 60%;
+    justify-content: space-between;
     align-items: center;
     font-weight: bold;
     padding: 0 1.5rem;
@@ -35,4 +38,24 @@ export const WindowActions = css`
         background-color: var(--third-color);
         color: var(--primary-color);
     }
-`
+`;
+
+export const SearchBar = css`
+    width: 60%;
+
+    input {
+        width: 100%;
+        background-color: var(--primary-color);
+        border-radius: var(--border-radius-primary);
+        border: 1px dotted var(--third-color-shadow);
+        color: var(--third-color);
+        font-size: 1.2rem;
+        padding: .5rem 1.2rem;
+        outline: none;
+
+
+        ::placeholder {
+            color: var(--third-color-shadow)
+        }
+    }
+`;

@@ -12,6 +12,7 @@
 			<List/>
 			<p>Notes</p>
 		</li>
+		<span></span>
 		<li id="move">
 			<Engine/>
 			<p>Configuration</p>

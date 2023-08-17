@@ -3,23 +3,21 @@ import { css } from "@emotion/css";
 export const SideBar = css`
     display: flex;
     height: 100%;
-    width: -webkit-fill-max;
+    width: 50%;
     margin: 0.8rem 1.2rem;
     grid-area: aside;
     flex-direction: column;
     border-right: .1px dotted var(--third-color-shadow);
 
     ul {
+        margin-top: 1.1rem;
         list-style: none;
         padding: 1rem;
-        column-gap: 1.5rem;
-        gap: 1.2rem;
     }
     
     ul li {
         position: relative;
         gap: 1.5rem;
-        margin-top: .9rem;
         display: flex;
         align-items: center;
         padding: 1rem 1.9rem;
@@ -32,5 +30,10 @@ export const SideBar = css`
     ul li:hover {
         background-color: var(--primary-color);
         color: var(--orange);
+    }
+
+    span {
+        border-left: 1px dotted var(--third-color-shadow);
+        margin-left: 2.5rem;
     }
 `
