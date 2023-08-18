@@ -1,8 +1,11 @@
-use rusqlite::{ Connection };
-use tauri::{AppHandle, App, Manager};
-use std::{fs::*};
+pub mod models;
 
-use crate::{utils::path_resolver::{get_data_dir, Databases, get_database}, models::notes::notes::{Notes, NotesActions}};
+use models::notes::note::{Notes, NotesActions};
+use rusqlite::Connection;
+use tauri::{AppHandle, App, Manager};
+use std::fs::*;
+
+use utils::path_resolver::{get_database, get_data_dir};
 
 pub fn init(app: &App) {
     let data_dir = get_data_dir(app.app_handle());
@@ -14,7 +17,7 @@ pub fn init(app: &App) {
     Notes::init(app.app_handle());
 }
 
-pub fn get_conn(app: &AppHandle, database: Databases) -> Connection {
+pub fn get_conn(app: &AppHandle, database: utils::path_resolver::Databases) -> Connection {
     match Connection::open(get_database(app.app_handle(), database)) {
         Ok(db) => db,
         Err(err) => {

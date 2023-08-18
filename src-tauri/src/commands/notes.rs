@@ -2,8 +2,7 @@ use std::vec;
 
 use tauri::Runtime;
 
-use crate::models::notes::notes::{Notes, NotesActions};
-
+use database::models::notes::note::{Notes};
 
 #[tauri::command]
 async fn create_note<R: Runtime>(app: tauri::AppHandle<R>, window: tauri::Window<R>, note: &str) -> Result<(), String> {

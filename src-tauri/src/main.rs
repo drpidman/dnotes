@@ -2,10 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod commands;
-mod database;
-mod utils;
-mod models;
-
+use database;
 
 fn main() {
   

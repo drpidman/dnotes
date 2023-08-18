@@ -2,7 +2,9 @@ use chrono::*;
 use serde::*;
 use tauri::{AppHandle, Manager};
 
-use crate::database::{get_conn, close_conn};
+use utils::*;
+
+use crate::{get_conn, close_conn};
 
 #[derive(Debug, Serialize, Deserialize)]
 /// ### Note - Struct for note
@@ -27,7 +29,7 @@ pub trait NotesActions {
 impl NotesActions for Notes {
     fn init(app: AppHandle) {
         println!("notes#init()");
-        let db = get_conn(&app, crate::utils::path_resolver::Databases::Notes);
+        let db = get_conn(&app, path_resolver::Databases::Notes);
 
         match db.execute(
             "CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMARY KEY,
@@ -51,7 +53,7 @@ impl NotesActions for Notes {
     }
 
     fn create(app: AppHandle, note: Notes) -> String {
-        let db = get_conn(&app, crate::utils::path_resolver::Databases::Notes);
+        let db = get_conn(&app, path_resolver::Databases::Notes);
 
         match db.execute("INSERT INTO notes(
             note,
