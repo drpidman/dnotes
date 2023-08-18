@@ -2,10 +2,20 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod database;
+mod utils;
 mod models;
 
+
 fn main() {
-  tauri::Builder::default()
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+  
+  let app = tauri::Builder::default()
+  .invoke_handler(tauri::generate_handler![])
+  .setup(|app| {
+    database::init(app);
+    Ok(())
+  });
+
+  app.run(tauri::generate_context!())
+  .expect("error while running tauri application");
+  
 }
