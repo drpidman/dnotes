@@ -1,6 +1,6 @@
 use chrono::*;
 use serde::*;
-use tauri::AppHandle;
+use tauri::{AppHandle, Manager};
 
 use crate::database::{get_conn, close_conn};
 
@@ -16,7 +16,8 @@ pub struct Notes {
 }
 
 pub trait NotesActions {
-    fn create() -> String;
+    fn create(app: AppHandle, note: Notes) -> String;
+
     fn find() -> String;
     fn delete() -> String;
 
@@ -49,7 +50,35 @@ impl NotesActions for Notes {
         close_conn(db);
     }
 
-    fn create() -> String {
+    fn create(app: AppHandle, note: Notes) -> String {
+        let db = get_conn(&app, crate::utils::path_resolver::Databases::Notes);
+
+        match db.execute("INSERT INTO notes(
+            note,
+            description,
+            accent_color,
+            content,
+            created_at
+        ) VALUES(:note, :description, :accent_color, :content, :created_at)",
+            &[
+                (":note", &note.note),
+                (":description", &note.description),
+                (":accent_color", &note.accent_color.to_string()),
+                (":content", &note.content),
+                (":created_at", &note.created_at.as_millis().to_string())
+            ]
+        ) {
+            Ok(_) => {
+                println!("Statement notes#create() Success!");
+            },
+            Err(err) => {
+                println!("A Error as ocurred: {:#?}", err);
+                panic!()
+            }
+        };
+
+        close_conn(db);
+
         String::from("")
     }
 
