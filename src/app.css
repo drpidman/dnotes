@@ -19,6 +19,8 @@
 
     --border-radius-primary: .5rem;
     --border-radius-secondary: 1.5rem;
+
+    --code-block-bg: #0f0f1a;
 }
 
 * {

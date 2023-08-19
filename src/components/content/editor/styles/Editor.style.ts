@@ -14,16 +14,17 @@ export const TextEditor = css`
 	height: -webkit-fill-avaliable;
 	transition: all 200ms ease-in-out;
 
+
 	div.milkdown div {
 		height: 100vh;
 		width: 100%;
 		outline: none;
 
 		color: var(--third-color);
-		background-color: var(--sedondary-color);
+		padding: 0 1.5rem;
 
 		ul {
-			list-style: none;
+			padding-left: 0.9rem;
 		}
 
 		h1 {
@@ -31,12 +32,12 @@ export const TextEditor = css`
 		}
 
 		p {
-			margin: .6rem 0;
+			margin: 0.6rem 0;
 		}
 
 		blockquote {
 			padding-left: 1.4rem;
-			margin: .5rem;
+			margin: 0.5rem;
 			position: relative;
 
 			::before {
@@ -50,16 +51,27 @@ export const TextEditor = css`
 			}
 		}
 
+		pre {
+			padding: 1.1rem;
+			background-color: var(--code-block-bg);
+			border-radius: var(--border-radius-primary);
+		}
+
 		hr {
-			height: .5px;
+			height: 0.5px;
 			margin: 1.2rem 0;
-			border: .6px dotted var(--third-color-shadow);
+			border: 0.6px dotted var(--third-color-shadow);
 		}
 	}
 
 	div.milkdown div > *:hover,
-	 div.milkdown div > *:active,
-	  div.milkdown div > *:focus-visible {
+	div.milkdown div > *:active,
+	div.milkdown div > *:focus-visible {
 		background-color: var(--third-color-shadow);
 	}
+
+	div.milkdown div > pre:hover {
+		background-color: var(--code-block-bg);
+	}
+
 `;

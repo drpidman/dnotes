@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../../app.css';
-	import 'bytemd/dist/index.css';
 
 	import Editor from '../../components/content/editor/ui/Editor.ui.svelte';
 	import Sidebar from '../../components/global/ui/Sidebar.ui.svelte';
