@@ -1,3 +1,4 @@
+use casual_logger::Log;
 use chrono::Duration;
 use serde::*;
 use tauri::AppHandle;
@@ -27,7 +28,8 @@ pub trait NotesActions {
 
 impl NotesActions for Notes {
     fn init(app: AppHandle) {
-        println!("notes#init()");
+        Log::info("notes:init()->init");
+
         let db = get_conn(&app, path_resolver::Databases::Notes);
 
         match db.execute(
@@ -40,10 +42,10 @@ impl NotesActions for Notes {
             (),
         ) {
             Ok(_) => {
-                println!("CREATE_TABLE:Notes created success");
+                Log::info("notes:init()->init->ok");
             }
             Err(err) => {
-                println!("Error to execute CREATE_TABLE:Notes {:#?}", err);
+                Log::error(&format!("notes:init()->init->error:{}", err));
                 panic!("Error to execute sql string")
             }
         };
@@ -75,10 +77,10 @@ impl NotesActions for Notes {
             ],
         ) {
             Ok(_) => {
-                println!("Statement notes#create() Success!");
+                Log::info("notes:init()->create->ok");
             }
             Err(err) => {
-                println!("A Error as ocurred: {:#?}", err);
+                Log::error(&format!("notes:init()->create->error:{}", err));
                 panic!()
             }
         };
@@ -97,7 +99,7 @@ impl NotesActions for Notes {
             let mut statement = match db.prepare("SELECT * FROM notes WHERE note = :note ") {
                 Ok(stmt) => stmt,
                 Err(err) => {
-                    println!("Error ocurred: {:}", err);
+                    Log::error(&format!("notes:init()->find->error:{}", err));
                     panic!()
                 }
             };
@@ -115,7 +117,7 @@ impl NotesActions for Notes {
             }) {
                 Ok(res) => res,
                 Err(err) => {
-                    println!("Error ocurred: {:}", err);
+                    Log::error(&format!("notes:init()->find->error:{}", err));
                     panic!()
                 }
             };

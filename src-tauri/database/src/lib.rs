@@ -1,5 +1,7 @@
 pub mod models;
 
+use casual_logger::Log;
+use chrono::format;
 use models::notes::note::{Notes, NotesActions};
 use rusqlite::Connection;
 use tauri::{AppHandle, App, Manager};
@@ -8,6 +10,8 @@ use std::fs::*;
 use utils::path_resolver::{get_database, get_data_dir};
 
 pub fn init(app: &App) {
+    Log::set_level(casual_logger::Level::Notice);
+
     let data_dir = get_data_dir(app.app_handle());
 
     if !metadata(data_dir.clone()).is_ok() {
@@ -21,7 +25,7 @@ pub fn get_conn(app: &AppHandle, database: utils::path_resolver::Databases) -> C
     match Connection::open(get_database(app.app_handle(), database)) {
         Ok(db) => db,
         Err(err) => {
-            eprintln!("Error ocurred:{:#?}", err);
+            Log::error(&format!("connection:open()->error:{}", err));
             panic!("Failed to open connection to database");
         }
     }
@@ -30,10 +34,11 @@ pub fn get_conn(app: &AppHandle, database: utils::path_resolver::Databases) -> C
 pub fn close_conn(db: Connection) {
     match db.close() {
         Ok(_) => {
-            println!("Connection ...#close");
+            Log::info("connection:close()->ok")
         },
         Err(_) => {
-            panic!("Failed to close connection to db");
+            Log::error("connection:close()->error");
+            panic!();
         }
     }
 }

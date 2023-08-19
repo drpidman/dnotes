@@ -10,6 +10,7 @@ serde_json = { version = "1.0.105"}
 rusqlite = { version = "0.29.0" }
 serde = { version = "1.0" }
 tauri = { version = "1.4.0" }
+casual_logger = "0.6.5"
 chrono = "0.4.26"
 
 utils = { path = "../utils" }
