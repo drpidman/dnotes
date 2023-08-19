@@ -1,9 +1,9 @@
+use chrono::Duration;
 use serde::*;
-use tauri::{AppHandle, Manager};
-
+use tauri::AppHandle;
 use utils::*;
 
-use crate::{get_conn, close_conn};
+use crate::{close_conn, get_conn};
 
 /// ### Note - Struct for note
 /// - Create a new notes object, parse to JSON for ready data
@@ -14,21 +14,19 @@ pub struct Notes {
     pub content: String,
     pub tags: Vec<String>,
     pub accent_color: i32,
-    pub created_at: std::time::Duration,
+    pub created_at: i32,
 }
 
 pub trait NotesActions {
-    fn create(app: AppHandle, note: Notes) -> String;
-
-    fn find() -> String;
-    fn delete() -> String;
-
     fn init(app: AppHandle);
+
+    fn create(app: AppHandle, note: Notes) -> String;
+    fn find(app: AppHandle, note: &str) -> String;
+    fn delete(note: &str) -> String;
 }
 
 impl NotesActions for Notes {
     fn init(app: AppHandle) {
-        
         println!("notes#init()");
         let db = get_conn(&app, path_resolver::Databases::Notes);
 
@@ -42,11 +40,11 @@ impl NotesActions for Notes {
             (),
         ) {
             Ok(_) => {
-                println!("Table notes#init created");
+                println!("CREATE_TABLE:Notes created success");
             }
             Err(err) => {
-                println!("Error to execute notes#init: {:#?}", err);
-                panic!("Error to execute db statement")
+                println!("Error to execute CREATE_TABLE:Notes {:#?}", err);
+                panic!("Error to execute sql string")
             }
         };
 
@@ -57,8 +55,9 @@ impl NotesActions for Notes {
         let db = get_conn(&app, path_resolver::Databases::Notes);
 
         let tags = serde_json::to_string(&note.tags).unwrap().to_string();
-    
-        match db.execute("INSERT INTO notes(
+
+        match db.execute(
+            "INSERT INTO notes(
             note,
             description,
             content,
@@ -72,12 +71,12 @@ impl NotesActions for Notes {
                 (":content", &note.content),
                 (":tags", &tags),
                 (":accent_color", &note.accent_color.to_string()),
-                (":created_at", &note.created_at.as_millis().to_string())
-            ]
+                (":created_at", &note.created_at.to_string()),
+            ],
         ) {
             Ok(_) => {
                 println!("Statement notes#create() Success!");
-            },
+            }
             Err(err) => {
                 println!("A Error as ocurred: {:#?}", err);
                 panic!()
@@ -89,11 +88,48 @@ impl NotesActions for Notes {
         String::from("")
     }
 
-    fn find() -> String {
-        String::from("")
+    fn find(app: AppHandle, note: &str) -> String {
+        let db = get_conn(&app, path_resolver::Databases::Notes);
+
+        let mut notes: Vec<Notes> = vec![];
+
+        {
+            let mut statement = match db.prepare("SELECT * FROM notes WHERE note = :note ") {
+                Ok(stmt) => stmt,
+                Err(err) => {
+                    println!("Error ocurred: {:}", err);
+                    panic!()
+                }
+            };
+
+            let note_rows = match statement.query_map(&[(":note", &note)], |row| {
+                Ok(Notes {
+                    note: row.get(0)?,
+                    description: row.get(1)?,
+                    content: row.get(2)?,
+                    tags: serde_json::from_str(&row.get_unwrap::<usize, String>(3).to_string())
+                        .unwrap(),
+                    accent_color: row.get_unwrap::<usize, i32>(4),
+                    created_at: row.get(5)?,
+                })
+            }) {
+                Ok(res) => res,
+                Err(err) => {
+                    println!("Error ocurred: {:}", err);
+                    panic!()
+                }
+            };
+
+            for note_item in note_rows {
+                notes.push(note_item.unwrap())
+            }
+        }
+
+        close_conn(db);
+        String::from(serde_json::to_string(&notes.get(0)).unwrap())
     }
 
-    fn delete() -> String {
+    fn delete(note: &str) -> String {
         String::from("")
     }
 }
