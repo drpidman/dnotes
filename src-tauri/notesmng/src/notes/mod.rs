@@ -16,26 +16,26 @@ pub struct NoteFile {
 }
 
 pub trait NotesAction {
-    fn create(app: AppHandle, note: Notes) -> Result<String, String>;
+    fn create(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String>;
     fn find_note(app: AppHandle, note: &str) -> Option<NoteFile>;
 }
 
 impl NotesAction for Notes {
-    fn create(app: AppHandle, note: Notes) -> Result<String, String> {
+    fn create(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String> {
         let notes_dir = get_notes_dir(app.app_handle());
 
-        if !Notes::find_note(app.app_handle(), &note.note).is_none() {
-            return Err("Note already exists".to_owned());
-        };
+        if let Some(find_note) = Notes::find_note(app.clone(), &note.note) {
+            return Err(String::from(format!("Note {} already exists", find_note.file_name)));
+        }
 
         let file_name = notes_dir + &note.note + ".md";
 
         match fs::File::create(&file_name) {
             Ok(_) => {
-                Ok(String::from("file created success"))
+                Ok(Notes::find_note(app, &note.note))
             },
             Err(err) => {
-                println!("Failed to create file because error:{:?}", err);
+                println!("Failed to create file. Error:{:?}", err);
                 panic!()
             }
         }
@@ -54,7 +54,7 @@ impl NotesAction for Notes {
                 panic!()
             }
         };
-
+        
         for file_item in notes_files {
             if let Ok(file_type) = file_item {
                 if file_type.file_name() == note {
