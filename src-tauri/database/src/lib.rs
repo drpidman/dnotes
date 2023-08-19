@@ -4,10 +4,10 @@ use casual_logger::Log;
 use chrono::format;
 use models::notes::note::{Notes, NotesActions};
 use rusqlite::Connection;
-use tauri::{AppHandle, App, Manager};
 use std::fs::*;
+use tauri::{App, AppHandle, Manager};
 
-use utils::path_resolver::{get_database, get_data_dir};
+use utils::path_resolver::{get_data_dir, get_database};
 
 pub fn init(app: &App) {
     Log::set_level(casual_logger::Level::Notice);
@@ -33,9 +33,7 @@ pub fn get_conn(app: &AppHandle, database: utils::path_resolver::Databases) -> C
 
 pub fn close_conn(db: Connection) {
     match db.close() {
-        Ok(_) => {
-            Log::info("connection:close()->ok")
-        },
+        Ok(_) => Log::info("connection:close()->ok"),
         Err(_) => {
             Log::error("connection:close()->error");
             panic!();
