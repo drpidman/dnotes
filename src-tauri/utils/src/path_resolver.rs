@@ -21,6 +21,14 @@ pub fn get_data_dir(app: tauri::AppHandle) -> String {
     }
 }
 
+pub fn get_notes_dir(app: tauri::AppHandle) -> String {
+    if cfg!(windows) {
+        get_app_data(app) + "notes"
+    } else {
+        get_app_data(app) + "/notes"
+    }
+}
+
 pub fn get_database(app: tauri::AppHandle, database: Databases) -> String {
     match database {
         Databases::Notes => {
