@@ -2,7 +2,7 @@ import { css } from "@emotion/css";
 
 export const SideBar = css`
     display: flex;
-    height: 100%;
+    height: 100vh;
     width: 50%;
     margin: 0.8rem 1.2rem;
     grid-area: aside;

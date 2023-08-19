@@ -6,6 +6,7 @@ export const EditorMenu = css`
     align-items: center;
     height: min-content;
     padding: 1.5rem;
+    margin-top: 1.2rem;
 
     span[role="button"] {
         display: flex;

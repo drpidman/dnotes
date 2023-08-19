@@ -38,10 +38,15 @@
 		"@emotion/css": "^11.11.2",
 		"@emotion/react": "^11.11.1",
 		"@emotion/styled": "^11.11.0",
+		"@milkdown/core": "^7.2.4",
+		"@milkdown/preset-commonmark": "^7.2.4",
+		"@milkdown/theme-nord": "^7.2.4",
 		"@tauri-apps/api": "^1.4.0",
 		"@types/jquery": "^3.5.16",
+		"bytemd": "^1.21.0",
 		"jquery": "^3.7.0",
 		"svelte-icons-pack": "^2.1.0",
+		"svelte-markdown": "^0.3.0",
 		"svelte-material-icons": "^3.0.5"
 	}
 }
