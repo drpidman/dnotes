@@ -1,6 +1,6 @@
 use notesmng::notes::{Notes, NotesAction};
 use serde::*;
-use tauri::{Runtime, Manager};
+use tauri::{Manager, Runtime};
 
 use gray_matter::engine::YAML;
 use gray_matter::Matter;

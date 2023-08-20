@@ -1,20 +1,20 @@
 <script>
-	import { SideBar } from "../styles/Sidebar.style";
-	import jquery from "jquery";
+	import { SideBar } from '../styles/Sidebar.style';
+	import jquery from 'jquery';
 
-	import List from "svelte-material-icons/Library.svelte";
-	import Engine from "svelte-material-icons/Engine.svelte";
-
+	import List from 'svelte-material-icons/Library.svelte';
+	import Engine from 'svelte-material-icons/Engine.svelte';
 </script>
+
 <aside class={SideBar}>
-    <ul>
+	<ul>
 		<li id="move">
-			<List/>
+			<List />
 			<p>Notes</p>
 		</li>
-		<span></span>
+		<span />
 		<li id="move">
-			<Engine/>
+			<Engine />
 			<p>Configuration</p>
 		</li>
 	</ul>

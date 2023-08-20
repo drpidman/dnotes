@@ -22,7 +22,7 @@ export const ButtonPrimaryOutline = css`
 		content: '';
 		display: block;
 		position: absolute;
-        border-radius: var(--border-radius-primary);
+		border-radius: var(--border-radius-primary);
 		left: 0;
 		top: 0;
 		width: 100%;
@@ -35,7 +35,7 @@ export const ButtonPrimaryOutline = css`
 	:active:after {
 		box-shadow: 0 0 0 0 var(--third-color);
 		position: absolute;
-        border-radius: var(--border-radius-primary);
+		border-radius: var(--border-radius-primary);
 		left: 0;
 		top: 0;
 		opacity: 1;

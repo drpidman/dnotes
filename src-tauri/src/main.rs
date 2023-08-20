@@ -6,20 +6,15 @@ use tauri::Manager;
 
 mod commands;
 
-
 fn main() {
+    let app = tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![commands::notes::create_note])
+        .setup(|app| {
+            Notes::init(app.app_handle());
 
-  let app = tauri::Builder::default()
-  .invoke_handler(tauri::generate_handler![
-    commands::notes::create_note
-  ])
-  .setup(|app| {
-    Notes::init(app.app_handle());
+            Ok(())
+        });
 
-    Ok(())
-  });
-
-  app.run(tauri::generate_context!())
-  .expect("error while running tauri application");
-  
+    app.run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }

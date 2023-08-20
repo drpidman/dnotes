@@ -14,7 +14,6 @@ export const TextEditor = css`
 	height: -webkit-fill-avaliable;
 	transition: all 200ms ease-in-out;
 
-
 	div.milkdown div {
 		height: 100vh;
 		width: 100%;
@@ -73,5 +72,4 @@ export const TextEditor = css`
 	div.milkdown div > pre:hover {
 		background-color: var(--code-block-bg);
 	}
-
 `;

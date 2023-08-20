@@ -1,7 +1,7 @@
 use serde::*;
-use tauri::api::file;
-use std::fs::{self, read_dir, File, metadata, create_dir};
+use std::fs::{self, create_dir, metadata, read_dir, File};
 use std::io::prelude::*;
+use tauri::api::file;
 use tauri::{AppHandle, Manager};
 use utils::path_resolver::get_notes_dir;
 
@@ -9,7 +9,7 @@ use utils::path_resolver::get_notes_dir;
 pub struct Notes {
     pub title: String,
     pub description: String,
-    pub tags: Vec<String>
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug)]
@@ -46,9 +46,7 @@ impl NotesAction for Notes {
         };
 
         let mut file_create = match fs::File::create(&file_name) {
-            Ok(file) => {
-                file
-            },
+            Ok(file) => file,
             Err(err) => {
                 println!("Failed to create file. Error:{:?}", err);
                 panic!()
@@ -58,7 +56,7 @@ impl NotesAction for Notes {
         match file_create.write(content.as_bytes()) {
             Ok(_) => {
                 println!("File creation success");
-            },
+            }
             Err(err) => {
                 println!("Failed to create file. Error:{:?}", err);
                 panic!()
@@ -84,13 +82,13 @@ impl NotesAction for Notes {
         for file_item in notes_files {
             if let Ok(file_type) = file_item {
                 if file_type.file_name().into_string().unwrap() == note.to_string() + ".md" {
-                    found_note = Some(NoteFile
-                        { file_name: (file_type.file_name().into_string().unwrap()) }
-                    );
+                    found_note = Some(NoteFile {
+                        file_name: (file_type.file_name().into_string().unwrap()),
+                    });
                     break;
                 }
             }
-        };
+        }
 
         found_note
     }
