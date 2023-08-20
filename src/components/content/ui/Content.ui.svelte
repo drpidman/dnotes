@@ -5,6 +5,13 @@
 
 	import Tag from 'svelte-material-icons/Tag.svelte';
 	import Book from 'svelte-material-icons/Book.svelte';
+	import { notesState } from '../../../states/notes';
+
+	let notes: any = [];
+	notesState.subscribe((value) => {
+		console.log(notes);
+		notes = value;
+	});
 
 	function redirect_editor() {
 		window.location.href = `editor`;
@@ -30,99 +37,30 @@
 		</section>
 	</div>
 
-	<div
-		class={Note}
-		style="
-         --enabled-color: var(--third-color-shadow);
-         --bars-accent-color: var(--orange);
-         --cursor-type: pointer"
-	>
-		<section class={NoteHead}>
-			<h1>The big techs</h1>
-		</section>
-		<div class={NoteTags}>
-			<span><Tag /> Livros</span>
+	{#each notes as note}
+		<div
+			class={Note}
+			style="
+				--enabled-color: var(--third-color-shadow);
+				--bars-accent-color: var(--orange);
+				--cursor-type: pointer"
+			>
+			<section class={NoteHead}>
+				<h1>{note.data.title}</h1>
+			</section>
+			<div class={NoteTags}>
+				{#each note.data.tags as tag}
+					<span><Tag /> {tag}</span>
+				{/each}
+			</div>
+			<section class={NoteBody}>
+				{note.data.description}
+				<br /><br />
+				<button class={ButtonPrimaryOutline} style="width: 50%;" on:click={redirect_editor}>
+					<Book />
+					Editar nota
+				</button>
+			</section>
 		</div>
-		<section class={NoteBody}>Lorem import cascade if obj.not('selector expression')</section>
-	</div>
-
-	<div
-		class={Note}
-		style="
-	 --enabled-color: var(--third-color-shadow);
-	 --bars-accent-color: var(--orange);
-	 --cursor-type: pointer"
-	>
-		<section class={NoteHead}>
-			<h1>The big techs</h1>
-		</section>
-		<div class={NoteTags}>
-			<span><Tag /> Livros</span>
-		</div>
-		<section class={NoteBody}>Lorem import cascade if obj.not('selector expression')</section>
-	</div>
-
-	<div
-		class={Note}
-		style="
- --enabled-color: var(--third-color-shadow);
- --bars-accent-color: var(--orange);
- --cursor-type: pointer"
-	>
-		<section class={NoteHead}>
-			<h1>The big techs</h1>
-		</section>
-		<div class={NoteTags}>
-			<span><Tag /> Livros</span>
-		</div>
-		<section class={NoteBody}>Lorem import cascade if obj.not('selector expression')</section>
-	</div>
-
-	<div
-		class={Note}
-		style="
- --enabled-color: var(--third-color-shadow);
- --bars-accent-color: var(--orange);
- --cursor-type: pointer"
-	>
-		<section class={NoteHead}>
-			<h1>The big techs</h1>
-		</section>
-		<div class={NoteTags}>
-			<span><Tag /> Livros</span>
-		</div>
-		<section class={NoteBody}>Lorem import cascade if obj.not('selector expression')</section>
-	</div>
-
-	<div
-		class={Note}
-		style="
- --enabled-color: var(--third-color-shadow);
- --bars-accent-color: var(--orange);
- --cursor-type: pointer"
-	>
-		<section class={NoteHead}>
-			<h1>The big techs</h1>
-		</section>
-		<div class={NoteTags}>
-			<span><Tag /> Livros</span>
-		</div>
-		<section class={NoteBody}>Lorem import cascade if obj.not('selector expression')</section>
-	</div>
-
-	<div
-		class={Note}
-		style="
- --enabled-color: var(--third-color-shadow);
- --bars-accent-color: var(--orange);
- --cursor-type: pointer"
-	>
-		<section class={NoteHead}>
-			<h1>The big techs</h1>
-		</section>
-		<div class={NoteTags}>
-			<span><Tag /> Livros</span>
-		</div>
-		<section class={NoteBody}>Lorem import cascade if obj.not('selector expression')</section>
-	</div>
+	{/each}
 </div>

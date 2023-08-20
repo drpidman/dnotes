@@ -125,8 +125,6 @@ impl NotesAction for Notes {
 
         for file_item in notes_files {
             if let Ok(file) = file_item {
-
-                
                 notes.push(NoteFile {
                     file_name: (file.file_name().into_string().unwrap()),
                     file_path: (file.path()),
@@ -134,7 +132,6 @@ impl NotesAction for Notes {
                 })
             }
         }
-
         notes
     }
 }

@@ -5,10 +5,17 @@
 	import Sidebar from '../components/global/ui/Sidebar.ui.svelte';
 	import GridLayout from '../components/layout/ui/GridLayout.ui.svelte';
 	import WindowManager from '../components/layout/ui/WindowManager.ui.svelte';
+	import { notesState } from '../states/notes';
 
-	export let data;
+	export let data: any;
 
-	console.log(data);
+	const notes = data.notes;
+	notesState.set(notes);
+
+	notesState.subscribe((value) => {
+		console.log(value);
+	})
+	
 
 </script>
 

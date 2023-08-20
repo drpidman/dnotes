@@ -6,7 +6,6 @@ export async function load() {
 
     let notes: any = {};
 
-
     await invoke("find_all_notes")
     .then((data: any) => {
         notes = JSON.parse(data);
