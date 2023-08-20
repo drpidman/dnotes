@@ -11,6 +11,7 @@
 
 	const notes = data.notes;
 	notesState.set(notes);
+	notesState.update((notes) => notes.map((value: any) => ({...value, actionsVisible: false })));
 
 	notesState.subscribe((value) => {
 		console.log(value);

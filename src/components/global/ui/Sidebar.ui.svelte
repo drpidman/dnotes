@@ -10,12 +10,12 @@
 	<ul>
 		<li id="move">
 			<List />
-			<p>Notes</p>
+			<p>Notas</p>
 		</li>
 		<span />
 		<li id="move">
 			<Engine />
-			<p>Configuration</p>
+			<p>Configurações</p>
 		</li>
 	</ul>
 </aside>

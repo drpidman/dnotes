@@ -16,7 +16,7 @@ export const Note = css`
 	:before {
 		content: '';
 		position: absolute;
-		width: 0;
+		width: 0.1%;
 		height: 100%;
 		transition: all 200ms ease-in-out;
 		right: 0;
@@ -27,7 +27,7 @@ export const Note = css`
 	:after {
 		content: '';
 		position: absolute;
-		width: 0;
+		width: 0.1%;
 		height: 100%;
 		transition: all 200ms ease-in-out;
 		left: 0;
@@ -38,7 +38,8 @@ export const Note = css`
 
 	:hover::before,
 	:hover::after {
-		width: 1%;
+		width: 0.5%;
+		background-color: var(--bars-accent-color);
 	}
 
 	:active {
@@ -73,3 +74,24 @@ export const NoteTags = css`
 export const NoteBody = css`
 	margin-top: 0.5rem;
 `;
+
+export const NoteActions = css`
+	background-color: var(--third-color-shadow);	
+	position: absolute;
+
+	display: flex;
+	flex-wrap: wrap;
+	flex-grow: 300px;
+	align-items: center;
+	justify-content: center;
+	gap: .5rem;
+
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	backdrop-filter: blur(5px);
+	padding: 1.5rem;
+	z-index: 1;
+`
