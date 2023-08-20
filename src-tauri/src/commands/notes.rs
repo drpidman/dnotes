@@ -28,7 +28,7 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<(), String
 }
 
 #[tauri::command]
-pub async fn find_all(
+pub async fn find_all_notes(
     app: tauri::AppHandle,
 ) -> Result<String, String> {
     let data = Notes::find_all(app);

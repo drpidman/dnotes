@@ -10,7 +10,7 @@ fn main() {
     let app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             commands::notes::create_note,
-            commands::notes::find_all
+            commands::notes::find_all_notes
             ])
         .setup(|app| {
             Notes::init(app.app_handle());

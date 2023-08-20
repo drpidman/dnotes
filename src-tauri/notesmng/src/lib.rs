@@ -46,6 +46,8 @@ pub mod tests {
                 if file_type.file_name() == note {
                     found_note = Some(NoteFile {
                         file_name: (file_type.file_name().into_string().unwrap()),
+                        file_path: (file_type.path()),
+                        contents: "".to_string()
                     });
                     break;
                 }

@@ -5,6 +5,11 @@
 	import Sidebar from '../components/global/ui/Sidebar.ui.svelte';
 	import GridLayout from '../components/layout/ui/GridLayout.ui.svelte';
 	import WindowManager from '../components/layout/ui/WindowManager.ui.svelte';
+
+	export let data;
+
+	console.log(data);
+
 </script>
 
 <WindowManager />

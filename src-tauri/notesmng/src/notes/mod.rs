@@ -1,7 +1,8 @@
 use core::panic;
 use serde::*;
 use std::fs::{self, create_dir, metadata, read_dir, File};
-use std::io::prelude::*;
+use std::io::{prelude::*, self};
+use std::path::{PathBuf, Path};
 use tauri::api::file;
 use tauri::{AppHandle, Manager};
 use utils::path_resolver::get_notes_dir;
@@ -17,6 +18,8 @@ pub struct Notes {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NoteFile {
     pub file_name: String,
+    pub file_path: PathBuf,
+    pub contents: String
 }
 
 pub trait NotesAction {
@@ -96,6 +99,8 @@ impl NotesAction for Notes {
                 if file_type.file_name().into_string().unwrap() == note.to_string() + ".md" {
                     found_note = Some(NoteFile {
                         file_name: (file_type.file_name().into_string().unwrap()),
+                        file_path: (file_type.path()),
+                        contents: (fs::read_to_string(file_type.path()).unwrap())
                     });
                     break;
                 }
@@ -120,8 +125,12 @@ impl NotesAction for Notes {
 
         for file_item in notes_files {
             if let Ok(file) = file_item {
+
+                
                 notes.push(NoteFile {
                     file_name: (file.file_name().into_string().unwrap()),
+                    file_path: (file.path()),
+                    contents: fs::read_to_string(file.path()).unwrap()
                 })
             }
         }
