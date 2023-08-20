@@ -1,12 +1,12 @@
 use core::panic;
 use serde::*;
-use std::fs::{self, create_dir, metadata, read_dir, File};
-use std::io::{prelude::*, self};
-use std::path::{PathBuf, Path};
-use tauri::api::file;
+use std::fs::{self, create_dir, metadata, read_dir};
+use std::io::prelude::*;
+use std::path::PathBuf;
 use tauri::{AppHandle, Manager};
 use utils::path_resolver::get_notes_dir;
 
+// ? Estrutura para .md
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Notes {
     pub title: String,
@@ -14,23 +14,26 @@ pub struct Notes {
     pub tags: Vec<String>,
 }
 
-// ! Only one return
+// ? Estrutura para arquivo
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NoteFile {
     pub file_name: String,
     pub file_path: PathBuf,
-    pub contents: String
+    pub contents: String,
 }
 
 pub trait NotesAction {
-    // ? Initialize/create notes directory
+    // ? Função para inicializar/criar o diretorio de notas
+    // ? Criar  diretorios adicionais 
     fn init(app: AppHandle);
 
-    // ? Methods to create and delete notes
+    // ? Metodos para criar e deletar uma nota.
+    // ? Toda a manipulação de arquivos como exclusão/inserção/edição
     fn create(app: AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String>;
     fn delete(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String>;
 
-    // ? Methods to find and find all notes
+    // ? Metodos para lidar com metadados dos arquivos
+    // ? Leitura de modelo de .md como YAML
     fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile>;
     fn find_all(app: AppHandle) -> Vec<NoteFile>;
 }
@@ -69,7 +72,7 @@ impl NotesAction for Notes {
                 println!("File creation success");
             }
             Err(err) => {
-                println!("Failed to create file. Error:{:?}", err);
+                println!("Failed to write file. Error:{:?}", err);
                 panic!()
             }
         }
@@ -82,6 +85,8 @@ impl NotesAction for Notes {
     }
 
     fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile> {
+        println!("find_note() {}", note);
+
         let notes_dir = get_notes_dir(app.clone().app_handle());
         let mut found_note: Option<NoteFile> = None;
 
@@ -89,18 +94,18 @@ impl NotesAction for Notes {
             Ok(files) => files,
 
             Err(err) => {
-                println!("Error ocurred:{:?}", err);
+                println!("Error to read files:{:?}", err);
                 panic!()
             }
         };
 
         for file_item in notes_files {
             if let Ok(file_type) = file_item {
-                if file_type.file_name().into_string().unwrap() == note.to_string() + ".md" {
+                if file_type.file_name().into_string().unwrap() == note.to_string() {
                     found_note = Some(NoteFile {
                         file_name: (file_type.file_name().into_string().unwrap()),
                         file_path: (file_type.path()),
-                        contents: (fs::read_to_string(file_type.path()).unwrap())
+                        contents: (fs::read_to_string(file_type.path()).unwrap()),
                     });
                     break;
                 }
@@ -112,20 +117,20 @@ impl NotesAction for Notes {
 
     fn find_all(app: AppHandle) -> Vec<NoteFile> {
         let notes_dir = get_notes_dir(app.clone());
-
         let mut notes: Vec<NoteFile> = vec![];
 
         let notes_files = match read_dir(&notes_dir) {
             Ok(files) => files,
             Err(err) => {
-                println!("Error ocurred:{:?}", err);
+                println!("Error to read files:{:?}", err);
                 panic!()
             }
         };
 
         for file_item in notes_files {
             if let Ok(file) = file_item {
-                notes.push(Notes::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
+                notes
+                    .push(Notes::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
             }
         }
         notes

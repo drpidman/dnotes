@@ -56,10 +56,6 @@
 			<section class={NoteBody}>
 				{note.data.description}
 				<br /><br />
-				<button class={ButtonPrimaryOutline} style="width: 50%;" on:click={redirect_editor}>
-					<Book />
-					Editar nota
-				</button>
 			</section>
 		</div>
 	{/each}
