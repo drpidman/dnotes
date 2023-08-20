@@ -31,7 +31,7 @@ pub trait NotesAction {
     fn delete(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String>;
 
     // ? Methods to find and find all notes
-    fn find_note(app: AppHandle, note: &str) -> Option<NoteFile>;
+    fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile>;
     fn find_all(app: AppHandle) -> Vec<NoteFile>;
 }
 
@@ -74,15 +74,15 @@ impl NotesAction for Notes {
             }
         }
 
-        Ok(Notes::find_note(app, &note.title))
+        Ok(Notes::find_note(&app, &note.title))
     }
 
     fn delete(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String> {
-        Ok(Notes::find_note(app, &note.title))
+        Ok(Notes::find_note(&app, &note.title))
     }
 
-    fn find_note(app: AppHandle, note: &str) -> Option<NoteFile> {
-        let notes_dir = get_notes_dir(app.app_handle());
+    fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile> {
+        let notes_dir = get_notes_dir(app.clone().app_handle());
         let mut found_note: Option<NoteFile> = None;
 
         let notes_files = match read_dir(&notes_dir) {
@@ -125,11 +125,7 @@ impl NotesAction for Notes {
 
         for file_item in notes_files {
             if let Ok(file) = file_item {
-                notes.push(NoteFile {
-                    file_name: (file.file_name().into_string().unwrap()),
-                    file_path: (file.path()),
-                    contents: fs::read_to_string(file.path()).unwrap()
-                })
+                notes.push(Notes::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
             }
         }
         notes
