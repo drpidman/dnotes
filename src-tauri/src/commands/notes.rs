@@ -5,7 +5,6 @@ use tauri::{Runtime, Manager};
 use gray_matter::engine::YAML;
 use gray_matter::Matter;
 
-
 #[tauri::command]
 pub async fn create_note(
     app: tauri::AppHandle,
@@ -26,6 +25,8 @@ pub async fn create_note(
     println!("note {:#?}", data);
 
     let created_note = Notes::create(app.app_handle(), data, result.orig);
+
+    println!("{:#?}", created_note);
 
     Ok(())
 }

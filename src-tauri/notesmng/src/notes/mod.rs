@@ -12,6 +12,7 @@ pub struct Notes {
     pub tags: Vec<String>
 }
 
+#[derive(Debug)]
 pub struct NoteFile {
     pub file_name: String,
 }
@@ -34,9 +35,9 @@ impl NotesAction for Notes {
     fn create(app: AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String> {
         let notes_dir = get_notes_dir(app.app_handle());
 
-        if let Some(find_note) = Notes::find_note(app.clone(), &note.title) {
-            return Err(String::from(format!("Note {} already exists", find_note.file_name)));
-        }
+        // if let Some(find_note) = Notes::find_note(app.clone(), &note.title) {
+        //     return Err(String::from(format!("Note {} already exists", find_note.file_name)));
+        // }
 
         let file_name = if cfg!(windows) {
             notes_dir + "\\" + &note.title + ".md"
@@ -65,7 +66,6 @@ impl NotesAction for Notes {
         }
 
         Ok(Notes::find_note(app, &note.title))
-
     }
 
     fn find_note(app: AppHandle, note: &str) -> Option<NoteFile> {
@@ -83,7 +83,7 @@ impl NotesAction for Notes {
 
         for file_item in notes_files {
             if let Ok(file_type) = file_item {
-                if file_type.file_name() == note {
+                if file_type.file_name().into_string().unwrap() == note.to_string() + ".md" {
                     found_note = Some(NoteFile
                         { file_name: (file_type.file_name().into_string().unwrap()) }
                     );
