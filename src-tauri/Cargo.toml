@@ -23,12 +23,13 @@ casual_logger = "0.6.5"
 chrono = "0.4.26"
 
 utils = { path = "./utils" }
-database = { path = "./database" }
+#database = { path = "./database" }
 notesmng = { path = "./notesmng" }
+gray_matter = "0.2.6"
 
 [workspace]
 members = [
-    "database",
+    # "database",
     "utils",
     "notesmng"
 ]

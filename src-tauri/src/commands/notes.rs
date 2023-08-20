@@ -1,17 +1,31 @@
-use std::vec;
+use notesmng::notes::{Notes, NotesAction};
+use serde::*;
+use tauri::{Runtime, Manager};
 
-use tauri::Runtime;
+use gray_matter::engine::YAML;
+use gray_matter::Matter;
 
-use database::models::notes::note::{Notes};
 
 #[tauri::command]
-async fn create_note<R: Runtime>(app: tauri::AppHandle<R>, window: tauri::Window<R>, note: &str) -> Result<(), String> {
+pub async fn create_note(
+    app: tauri::AppHandle,
+    window: tauri::Window,
+    note: &str,
+) -> Result<(), String> {
     if note.is_empty() {
-        return Err("Note not null".to_string())
+        return Err("Note not null".to_string());
     }
 
-    let note_data: Notes = serde_json::from_str(note).unwrap();
-    
+    let mut matter = Matter::<YAML>::new();
+    matter.delimiter = "***".to_owned();
+
+    let result = matter.parse(note);
+    let data: Notes = result.data.clone().unwrap().deserialize().unwrap();
+
+    println!("note {:#?}", result);
+    println!("note {:#?}", data);
+
+    let created_note = Notes::create(app.app_handle(), data, result.orig);
 
     Ok(())
 }

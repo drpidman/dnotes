@@ -1,15 +1,21 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use notesmng::notes::{Notes, NotesAction};
+use tauri::Manager;
+
 mod commands;
-use database;
+
 
 fn main() {
-  
+
   let app = tauri::Builder::default()
-  .invoke_handler(tauri::generate_handler![])
+  .invoke_handler(tauri::generate_handler![
+    commands::notes::create_note
+  ])
   .setup(|app| {
-    database::init(app);
+    Notes::init(app.app_handle());
+
     Ok(())
   });
 
