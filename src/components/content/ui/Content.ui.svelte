@@ -72,7 +72,7 @@
 						--button-background-color: var(--orange-small);
 						--button-text-color: var(--primary-color);
 						--button-on-hover-bg: var(--orange);
-						--button-hover-text-color: var(--primary-color);
+						--button-hover-text-color: #fff;
 						"
 					>
 						<Book />

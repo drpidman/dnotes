@@ -1,9 +1,10 @@
 use core::panic;
 use serde::*;
-use std::fs::{self, create_dir, metadata, read_dir, remove_file, File};
+use std::fs::{self, create_dir, metadata, read_dir, remove_file};
 use std::io::prelude::*;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager};
+use utils::logger::*;
 use utils::path_resolver::get_notes_dir;
 
 // ? Estrutura para .md
@@ -48,6 +49,7 @@ impl NotesAction for Notes {
     }
 
     fn create(app: AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String> {
+        log(LogType::Info, "note#create() handled"); 
         let notes_dir = get_notes_dir(app.app_handle());
         // if let Some(find_note) = Notes::find_note(app.clone(), &note.title) {
         //     return Err(String::from(format!("Note {} already exists", find_note.file_name)));
@@ -62,17 +64,17 @@ impl NotesAction for Notes {
         let mut file_create = match fs::File::create(&file_name) {
             Ok(file) => file,
             Err(err) => {
-                println!("Failed to create file. Error:{:?}", err);
+                log(LogType::Error, format!("note#create() error part: file_create. Error:{:}", err)); 
                 panic!()
             }
         };
 
         match file_create.write(content.as_bytes()) {
             Ok(_) => {
-                println!("File creation success");
+                log(LogType::Info, "note#create() success"); 
             }
             Err(err) => {
-                println!("Failed to write file. Error:{:?}", err);
+                log(LogType::Error, format!("note#create() error part: file_create:write. Error:{:}", err)); 
                 panic!()
             }
         }
@@ -81,19 +83,20 @@ impl NotesAction for Notes {
     }
 
     fn delete(app: AppHandle, note: &str) -> Result<Option<NoteFile>, String> {
+        log(LogType::Info, "note#delete() handled"); 
         let note = Self::find_note(&app, &note).unwrap();
 
         match remove_file(&note.file_path) {
             Ok(_) => Ok(Some(note)),
             Err(err) => {
-                println!("Error to delete file {:?}. Error {:?}", note.file_path, err);
+                log(LogType::Error, format!("note#delete() error part: file_delete. Error:{:}", err)); 
                 panic!()
             }
         }
     }
 
     fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile> {
-        println!("find_note() {}", note);
+        log(LogType::Info, "note#find_note() handled"); 
 
         let notes_dir = get_notes_dir(app.clone().app_handle());
         let mut found_note: Option<NoteFile> = None;
@@ -102,7 +105,7 @@ impl NotesAction for Notes {
             Ok(files) => files,
 
             Err(err) => {
-                println!("Error to read files:{:?}", err);
+                log(LogType::Error, format!("note#find_note() error part: file_read. Error:{:}", err)); 
                 panic!()
             }
         };
@@ -124,13 +127,15 @@ impl NotesAction for Notes {
     }
 
     fn find_all(app: AppHandle) -> Vec<NoteFile> {
+        log(LogType::Info, "note#find_all() handled"); 
+
         let notes_dir = get_notes_dir(app.clone());
         let mut notes: Vec<NoteFile> = vec![];
 
         let notes_files = match read_dir(&notes_dir) {
             Ok(files) => files,
             Err(err) => {
-                println!("Error to read files:{:?}", err);
+                log(LogType::Error, format!("note#find_all() error part: file_read. Error:{:}", err)); 
                 panic!()
             }
         };
