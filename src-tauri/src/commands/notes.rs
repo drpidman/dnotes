@@ -1,6 +1,6 @@
 use notesmng::notes::{NoteFile, Notes, NotesAction};
 use serde::*;
-use tauri::{Manager, Runtime};
+use tauri::Manager;
 
 use gray_matter::engine::YAML;
 use gray_matter::Matter;
@@ -24,8 +24,7 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, St
     let result = matter.parse(note);
     let data: Notes = result.data.clone().unwrap().deserialize().unwrap();
 
-    let created_note = Notes::create(app.app_handle(), data, result.orig)
-    .unwrap();
+    let created_note = Notes::create(app.app_handle(), data, result.orig).unwrap();
 
     Ok(serde_json::to_string(&created_note).unwrap())
 }
@@ -55,4 +54,15 @@ pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
     }
 
     Ok(serde_json::to_string(&note_response).unwrap())
+}
+
+#[tauri::command]
+pub async fn delete_note(app: tauri::AppHandle, note: &str) -> Result<String, String> {
+    if note.is_empty() {
+        return Err("Note not null".to_string());
+    }
+
+    let deleted_note = Notes::delete(app, note).unwrap();
+
+    Ok(serde_json::to_string(&deleted_note).unwrap())
 }

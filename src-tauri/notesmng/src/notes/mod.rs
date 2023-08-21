@@ -1,6 +1,6 @@
 use core::panic;
 use serde::*;
-use std::fs::{self, create_dir, metadata, read_dir, File, remove_file};
+use std::fs::{self, create_dir, metadata, read_dir, remove_file, File};
 use std::io::prelude::*;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager};
@@ -24,13 +24,13 @@ pub struct NoteFile {
 
 pub trait NotesAction {
     // ? Função para inicializar/criar o diretorio de notas
-    // ? Criar  diretorios adicionais 
+    // ? Criar  diretorios adicionais
     fn init(app: AppHandle);
 
     // ? Metodos para criar e deletar uma nota.
     // ? Toda a manipulação de arquivos como exclusão/inserção/edição
     fn create(app: AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String>;
-    fn delete(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String>;
+    fn delete(app: AppHandle, note: &str) -> Result<Option<NoteFile>, String>;
 
     // ? Metodos para lidar com metadados dos arquivos
     // ? Leitura de modelo de .md como YAML
@@ -80,13 +80,11 @@ impl NotesAction for Notes {
         Ok(Self::find_note(&app, &note.title))
     }
 
-    fn delete(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String> {
-        let note = Self::find_note(&app, &note.title).unwrap();
+    fn delete(app: AppHandle, note: &str) -> Result<Option<NoteFile>, String> {
+        let note = Self::find_note(&app, &note).unwrap();
 
         match remove_file(&note.file_path) {
-            Ok(_) => {
-                Ok(Some(note))
-            } 
+            Ok(_) => Ok(Some(note)),
             Err(err) => {
                 println!("Error to delete file {:?}. Error {:?}", note.file_path, err);
                 panic!()
@@ -139,8 +137,7 @@ impl NotesAction for Notes {
 
         for file_item in notes_files {
             if let Ok(file) = file_item {
-                notes
-                    .push(Self::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
+                notes.push(Self::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
             }
         }
         notes

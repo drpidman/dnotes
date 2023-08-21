@@ -7,7 +7,7 @@
 	import Book from 'svelte-material-icons/Book.svelte';
 	import { notesState } from '../../../states/notes';
 	import { Button } from '../../global/styles/Button.style';
-	import { note_action_close, note_mouse_down, note_mouse_up, to_editor } from './controls/content/content.control';
+	import { note_action_close, note_action_delete, note_mouse_down, note_mouse_up, to_editor } from './controls/content/content.control';
 	import type { Note as TNote } from '../../../types/note.type';
 
 	let notes: TNote[] = [];
@@ -67,6 +67,7 @@
 				<div class={NoteActions}>
 					<button
 						class={Button}
+						on:click={(e) => note_action_delete(e, note.file_data.file_name)}
 						style="width: 30%;
 						--button-background-color: var(--orange-small);
 						--button-text-color: var(--primary-color);

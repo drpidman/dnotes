@@ -1,3 +1,4 @@
+import { invoke } from '@tauri-apps/api';
 import { notesState } from '../../../../../states/notes';
 import type { Note } from '../../../../../types/note.type';
 let pressTime: number;
@@ -28,6 +29,20 @@ export function note_mouse_down(e: MouseEvent, noteIndex: number) {
 	}, 500);
 
 	return false;
+}
+
+export async function note_action_delete(e: MouseEvent, note_name: string) {
+	console.log("called", note_name)
+	e.preventDefault();
+
+	await invoke("delete_note", { note: note_name })
+	.then((_) => {
+		notes = notes.filter((note) => note.file_data.file_name != note_name);
+	}).catch((err) => {
+		console.log(err);
+	})
+
+	notesState.update(() => notes);
 }
 
 export function note_action_close(e: MouseEvent, noteIndex: number) {
