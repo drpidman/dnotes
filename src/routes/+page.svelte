@@ -6,15 +6,20 @@
 	import GridLayout from '../components/layout/ui/GridLayout.ui.svelte';
 	import WindowManager from '../components/layout/ui/WindowManager.ui.svelte';
 	import { notesState } from '../states/notes';
+	import type { Note } from '../types/note.type';
 
-	export let data: any;
+	type FromPage = {
+		notes: Note[]
+	}
+
+	export let data: FromPage;
 
 	const notes = data.notes;
 	notesState.set(notes);
-	notesState.update((notes) => notes.map((value: any) => ({...value, actionsVisible: false })));
+	notesState.update((notes) => notes.map((note: Note) => ({...note, actionsVisible: false })));
 
-	notesState.subscribe((value) => {
-		console.log(value);
+	notesState.subscribe((notes) => {
+		console.log(notes);
 	})
 	
 

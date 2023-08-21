@@ -1,10 +1,11 @@
 import { notesState } from '../../../../../states/notes';
+import type { Note } from '../../../../../types/note.type';
 let pressTime: number;
 
-let notes: any = [];
+let notes: Note[] = [];
 
-notesState.subscribe((value) => {
-	notes = value;
+notesState.subscribe((note) => {
+	notes = note;
 });
 
 export function to_editor() {
@@ -19,7 +20,7 @@ export function note_mouse_up(e: MouseEvent) {
 
 export function note_mouse_down(e: MouseEvent, noteIndex: number) {
 	pressTime = window.setTimeout(() => {
-		notes = notes.map((note: any, index: number) => ({
+		notes = notes.map((note: Note, index: number) => ({
 			...note,
 			actionsVisible: index === noteIndex ? true : note.actionsVisible
 		}));
@@ -31,7 +32,7 @@ export function note_mouse_down(e: MouseEvent, noteIndex: number) {
 
 export function note_action_close(e: MouseEvent, noteIndex: number) {
 	console.log('closer()', noteIndex);
-	notes = notes.map((note: any, index: number) => ({
+	notes = notes.map((note: Note, index: number) => ({
 		...note,
 		actionsVisible: index === noteIndex ? false : note.actionsVisible
 	}));

@@ -8,9 +8,11 @@
 	import { notesState } from '../../../states/notes';
 	import { Button } from '../../global/styles/Button.style';
 	import { note_action_close, note_mouse_down, note_mouse_up, to_editor } from './controls/content/content.control';
+	import type { Note as TNote } from '../../../types/note.type';
 
-	let notes: any = [];
-	notesState.subscribe((value: any[]) => {
+	let notes: TNote[] = [];
+
+	notesState.subscribe((value: TNote[]) => {
 		notes = value;
 	});
 
@@ -61,7 +63,6 @@
 				{note.data.description}
 				<br /><br />
 			</section>
-
 			{#if note.actionsVisible}
 				<div class={NoteActions}>
 					<button
