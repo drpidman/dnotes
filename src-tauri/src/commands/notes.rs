@@ -13,7 +13,7 @@ struct ResponseNote {
 
 // ! REFEATORAÇÃO NECESSARIA
 #[tauri::command]
-pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<(), String> {
+pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, String> {
     if note.is_empty() {
         return Err("Note not null".to_string());
     }
@@ -24,27 +24,22 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<(), String
     let result = matter.parse(note);
     let data: Notes = result.data.clone().unwrap().deserialize().unwrap();
 
-    println!("note {:#?}", result);
-    println!("note {:#?}", data);
+    let created_note = Notes::create(app.app_handle(), data, result.orig)
+    .unwrap();
 
-    let created_note = Notes::create(app.app_handle(), data, result.orig);
-
-    println!("{:#?}", created_note);
-
-    Ok(())
+    Ok(serde_json::to_string(&created_note).unwrap())
 }
 
 // ! REFEATORAÇÃO NECESSARIA
 #[tauri::command]
 pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
     let notes = Notes::find_all(app);
-
     let mut note_response: Vec<ResponseNote> = vec![];
 
     let mut matter = Matter::<YAML>::new();
     matter.delimiter = "***".to_owned();
 
-    for note in &notes {
+    for note in notes {
         let data: Notes = matter
             .parse(&note.contents)
             .data
@@ -54,11 +49,7 @@ pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
             .unwrap();
 
         note_response.push(ResponseNote {
-            file_data: NoteFile {
-                file_name: (note.file_name.clone()),
-                file_path: (note.file_path.clone()),
-                contents: (note.contents.clone()),
-            },
+            file_data: note,
             data: data,
         })
     }

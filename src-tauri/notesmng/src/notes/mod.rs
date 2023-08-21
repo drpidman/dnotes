@@ -1,6 +1,6 @@
 use core::panic;
 use serde::*;
-use std::fs::{self, create_dir, metadata, read_dir};
+use std::fs::{self, create_dir, metadata, read_dir, File, remove_file};
 use std::io::prelude::*;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager};
@@ -77,11 +77,21 @@ impl NotesAction for Notes {
             }
         }
 
-        Ok(Notes::find_note(&app, &note.title))
+        Ok(Self::find_note(&app, &note.title))
     }
 
     fn delete(app: AppHandle, note: Notes) -> Result<Option<NoteFile>, String> {
-        Ok(Notes::find_note(&app, &note.title))
+        let note = Self::find_note(&app, &note.title).unwrap();
+
+        match remove_file(&note.file_path) {
+            Ok(_) => {
+                Ok(Some(note))
+            } 
+            Err(err) => {
+                println!("Error to delete file {:?}. Error {:?}", note.file_path, err);
+                panic!()
+            }
+        }
     }
 
     fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile> {
@@ -130,7 +140,7 @@ impl NotesAction for Notes {
         for file_item in notes_files {
             if let Ok(file) = file_item {
                 notes
-                    .push(Notes::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
+                    .push(Self::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
             }
         }
         notes
