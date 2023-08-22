@@ -24,7 +24,7 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, St
     let result = matter.parse(note);
     let data: Notes = result.data.clone().unwrap().deserialize().unwrap();
 
-    let created_note = Notes::create(app.app_handle(), data, result.orig).unwrap();
+    let created_note = Notes::create(&app.app_handle(), data, result.orig).unwrap();
 
     Ok(serde_json::to_string(&created_note).unwrap())
 }
@@ -32,7 +32,7 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, St
 // ! REFEATORAÇÃO NECESSARIA
 #[tauri::command]
 pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
-    let notes = Notes::find_all(app);
+    let notes = Notes::find_all(&app);
     let mut note_response: Vec<ResponseNote> = vec![];
 
     let mut matter = Matter::<YAML>::new();
@@ -62,7 +62,7 @@ pub async fn delete_note(app: tauri::AppHandle, note: &str) -> Result<String, St
         return Err("Note not null".to_string());
     }
 
-    let deleted_note = Notes::delete(app, note).unwrap();
+    let deleted_note = Notes::delete(&app, note).unwrap();
 
     Ok(serde_json::to_string(&deleted_note).unwrap())
 }

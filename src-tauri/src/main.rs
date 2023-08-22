@@ -14,7 +14,7 @@ fn main() {
             commands::notes::delete_note
             ])
         .setup(|app| {
-            Notes::init(app.app_handle());
+            Notes::init(&app.app_handle());
 
             Ok(())
         });

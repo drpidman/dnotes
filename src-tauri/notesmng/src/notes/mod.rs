@@ -26,31 +26,31 @@ pub struct NoteFile {
 pub trait NotesAction {
     // ? Função para inicializar/criar o diretorio de notas
     // ? Criar  diretorios adicionais
-    fn init(app: AppHandle);
+    fn init(app: &AppHandle);
 
     // ? Metodos para criar e deletar uma nota.
     // ? Toda a manipulação de arquivos como exclusão/inserção/edição
-    fn create(app: AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String>;
-    fn delete(app: AppHandle, note: &str) -> Result<Option<NoteFile>, String>;
+    fn create(app: &AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String>;
+    fn delete(app: &AppHandle, note: &str) -> Result<Option<NoteFile>, String>;
 
     // ? Metodos para lidar com metadados dos arquivos
     // ? Leitura de modelo de .md como YAML
     fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile>;
-    fn find_all(app: AppHandle) -> Vec<NoteFile>;
+    fn find_all(app: &AppHandle) -> Vec<NoteFile>;
 }
 
 impl NotesAction for Notes {
-    fn init(app: AppHandle) {
-        let notes_dir = get_notes_dir(app.app_handle());
+    fn init(app: &AppHandle) {
+        let notes_dir = get_notes_dir(app);
 
         if !metadata(notes_dir.clone()).is_ok() {
             create_dir(notes_dir).expect("Failed to create");
         }
     }
 
-    fn create(app: AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String> {
+    fn create(app: &AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String> {
         log(LogType::Info, "note#create() handled"); 
-        let notes_dir = get_notes_dir(app.app_handle());
+        let notes_dir = get_notes_dir(app);
         // if let Some(find_note) = Notes::find_note(app.clone(), &note.title) {
         //     return Err(String::from(format!("Note {} already exists", find_note.file_name)));
         // }
@@ -82,7 +82,7 @@ impl NotesAction for Notes {
         Ok(Self::find_note(&app, &note.title))
     }
 
-    fn delete(app: AppHandle, note: &str) -> Result<Option<NoteFile>, String> {
+    fn delete(app: &AppHandle, note: &str) -> Result<Option<NoteFile>, String> {
         log(LogType::Info, "note#delete() handled"); 
         let note = Self::find_note(&app, &note).unwrap();
 
@@ -98,7 +98,7 @@ impl NotesAction for Notes {
     fn find_note(app: &AppHandle, note: &str) -> Option<NoteFile> {
         log(LogType::Info, "note#find_note() handled"); 
 
-        let notes_dir = get_notes_dir(app.clone().app_handle());
+        let notes_dir = get_notes_dir(app);
         let mut found_note: Option<NoteFile> = None;
 
         let notes_files = match read_dir(&notes_dir) {
@@ -126,10 +126,10 @@ impl NotesAction for Notes {
         found_note
     }
 
-    fn find_all(app: AppHandle) -> Vec<NoteFile> {
+    fn find_all(app: &AppHandle) -> Vec<NoteFile> {
         log(LogType::Info, "note#find_all() handled"); 
 
-        let notes_dir = get_notes_dir(app.clone());
+        let notes_dir = get_notes_dir(app);
         let mut notes: Vec<NoteFile> = vec![];
 
         let notes_files = match read_dir(&notes_dir) {
