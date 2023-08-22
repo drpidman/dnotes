@@ -11,6 +11,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             commands::notes::create_note,
             commands::notes::find_all_notes,
+            commands::notes::find_note,
             commands::notes::delete_note
             ])
         .setup(|app| {

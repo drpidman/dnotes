@@ -9,17 +9,29 @@ notesState.subscribe((note) => {
 	notes = note;
 });
 
-export function to_editor() {
-	window.location.href = '/editor';
+export function to_editor(e: MouseEvent, note?: Note) {
+	if (note?.actionsVisible) return;
+
+	e.preventDefault();
+	
+	if (note) {
+		window.location.href = `/editor?note=${note.data.title}`;
+		return;
+	}
+
+	window.location.href = `/editor`;
 }
 
-export function note_mouse_up(e: MouseEvent) {
-	clearTimeout(pressTime);
 
+export function note_mouse_up(e: MouseEvent) {
+	e.preventDefault();
+	clearTimeout(pressTime);
 	return false;
 }
 
 export function note_mouse_down(e: MouseEvent, noteIndex: number) {
+	e.preventDefault();
+
 	pressTime = window.setTimeout(() => {
 		notes = notes.map((note: Note, index: number) => ({
 			...note,

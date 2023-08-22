@@ -42,6 +42,7 @@
 		<div
 			role="button"
 			tabindex="0"
+			on:click={(e) => to_editor(e, note)}
 			on:keyup={(e) => note_mouse_up}
 			on:mouseup={(e) => note_mouse_up(e)}
 			on:mousedown={(e) => note_mouse_down(e, index)}

@@ -1,6 +1,6 @@
 use notesmng::notes::{NoteFile, Notes, NotesAction};
 use serde::*;
-use tauri::Manager;
+use tauri::{Manager, Runtime};
 
 use gray_matter::engine::YAML;
 use gray_matter::Matter;
@@ -49,9 +49,33 @@ pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
 
         note_response.push(ResponseNote {
             file_data: note,
-            data
+            data,
         })
     }
+
+    Ok(serde_json::to_string(&note_response).unwrap())
+}
+
+#[tauri::command]
+pub async fn find_note(app: tauri::AppHandle, note: &str) -> Result<String, String> {
+    let found_note = Notes::find_note(&app, note).unwrap();
+
+    let mut note_response: Vec<ResponseNote> = vec![];
+
+    let mut matter = Matter::<YAML>::new();
+    matter.delimiter = "***".to_owned();
+
+    let data: Notes = matter
+        .parse(&found_note.contents)
+        .data
+        .unwrap()
+        .deserialize()
+        .unwrap();
+
+    note_response.push(ResponseNote {
+        file_data: found_note,
+        data,
+    });
 
     Ok(serde_json::to_string(&note_response).unwrap())
 }
