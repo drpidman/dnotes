@@ -142,7 +142,12 @@ impl NotesAction for Notes {
 
         for file_item in notes_files {
             if let Ok(file) = file_item {
-                notes.push(Self::find_note(&app, &file.file_name().into_string().unwrap()).unwrap())
+                notes.push(
+                    Self::find_note(&app, &file.file_name()
+                    .into_string()
+                    .unwrap())
+                    .unwrap()
+                )
             }
         }
         notes

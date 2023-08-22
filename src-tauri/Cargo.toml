@@ -41,6 +41,7 @@ members = [
 custom-protocol = [ "tauri/custom-protocol" ]
 
 [profile.release]
-strip = true # tirar simbols
-opt-level = "z" # otimizar o tamanho
+strip = true
+opt-level = "z"
 lto = true
+panic = "abort"

@@ -7,5 +7,4 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.26"
-colorize = "0.1.0"
 tauri = { version = "1.4.0" }
