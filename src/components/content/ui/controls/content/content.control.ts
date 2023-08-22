@@ -1,7 +1,9 @@
 import { invoke } from '@tauri-apps/api';
 import { notesState } from '../../../../../states/notes';
 import type { Note } from '../../../../../types/note.type';
+
 let pressTime: number;
+let pressRecent = false;
 
 let notes: Note[] = [];
 
@@ -10,16 +12,16 @@ notesState.subscribe((note) => {
 });
 
 export function to_editor(e: MouseEvent, note?: Note) {
-	if (note?.actionsVisible) return;
-
 	e.preventDefault();
-	
+
+	if (note?.actionsVisible || pressRecent) return;
+
 	if (note) {
 		window.location.href = `/editor?note=${note.data.title}`;
 		return;
 	}
 
-	window.location.href = `/editor`;
+	window.location.href = `/editor`; 
 }
 
 
@@ -44,7 +46,6 @@ export function note_mouse_down(e: MouseEvent, noteIndex: number) {
 }
 
 export async function note_action_delete(e: MouseEvent, note_name: string) {
-	console.log("called", note_name)
 	e.preventDefault();
 
 	await invoke("delete_note", { note: note_name })
@@ -58,10 +59,18 @@ export async function note_action_delete(e: MouseEvent, note_name: string) {
 }
 
 export function note_action_close(e: MouseEvent, noteIndex: number) {
-	console.log('closer()', noteIndex);
+	e.preventDefault();
+
+	pressRecent = true;
+
 	notes = notes.map((note: Note, index: number) => ({
 		...note,
 		actionsVisible: index === noteIndex ? false : note.actionsVisible
 	}));
 	notesState.update(() => notes);
+
+	setTimeout(() => {
+		pressRecent = false;
+	}, 500)
+
 }
