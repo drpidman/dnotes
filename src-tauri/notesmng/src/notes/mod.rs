@@ -125,7 +125,10 @@ impl NotesAction for Notes {
         let found_note = notes_files
             .flatten()
             .filter(|f| f.file_name().into_string().unwrap().ends_with(".md"))
-            .find(|file| file.file_name().into_string().unwrap() == *note)
+            .find(|file| {
+                file.file_name().into_string().unwrap() == *note
+                    || file.file_name().into_string().unwrap().contains(note)
+            })
             .unwrap();
 
         Some(NoteFile {
@@ -152,8 +155,7 @@ impl NotesAction for Notes {
             }
         };
 
-        for file_item in notes_files
-        .filter_map(Result::ok) {
+        for file_item in notes_files.filter_map(Result::ok) {
             notes.push(Self::find_note(app, &file_item.file_name().into_string().unwrap()).unwrap())
         }
 

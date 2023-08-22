@@ -15,7 +15,11 @@
 	async function saveContent() {
 		await invoke('create_note', {
 			note: outputMark
-		});
+		}).then((res) => {
+			alert("Nota criada")
+		}).catch((err) => {
+			alert("Erro")
+		})
 	}
 
 	function handleKey(event: KeyboardEvent) {
