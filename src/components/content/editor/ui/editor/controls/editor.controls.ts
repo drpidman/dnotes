@@ -16,8 +16,8 @@ const defaultContent = `---
 title: Meu primeiro post
 description: Descrição do meu primeiro post
 tags:
-- helo
-- world
+- Hello
+- World
 ---
 
 # Olá !
@@ -33,7 +33,7 @@ editNoteState.subscribe((note: Note) => {
 
 export async function saveContent() {
 	const title = titleExtractor(markdownOutput);
-	
+
 	if ((Object.keys(noteData).length != 0) && title != noteData.data.title) {
 		await invoke('delete_note', {
 			note: noteData.data.title
