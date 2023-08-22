@@ -22,7 +22,8 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, St
     matter.delimiter = "***".to_owned();
 
     let result = matter.parse(note);
-    let data: Notes = result.data.unwrap().deserialize().unwrap();
+
+    let data = result.data.unwrap().deserialize().unwrap();
 
     let created_note = Notes::create(&app.app_handle(), data, result.orig).unwrap();
 
@@ -48,7 +49,7 @@ pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
 
         note_response.push(ResponseNote {
             file_data: note,
-            data: data,
+            data
         })
     }
 
