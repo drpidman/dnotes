@@ -43,7 +43,7 @@ impl NotesAction for Notes {
     fn init(app: &AppHandle) {
         let notes_dir = get_notes_dir(app);
 
-        if !metadata(notes_dir.clone()).is_ok() {
+        if !metadata(&notes_dir).is_ok() {
             create_dir(notes_dir).expect("Failed to create");
         }
     }
@@ -61,7 +61,7 @@ impl NotesAction for Notes {
             notes_dir + "/" + &note.title + ".md"
         };
 
-        let mut file_create = match fs::File::create(&file_name) {
+        let mut file_create = match fs::File::create(file_name) {
             Ok(file) => file,
             Err(err) => {
                 log(LogType::Error, format!("note#create() error part: file_create. Error:{:}", err)); 
@@ -101,7 +101,7 @@ impl NotesAction for Notes {
         let notes_dir = get_notes_dir(app);
         let mut found_note: Option<NoteFile> = None;
 
-        let notes_files = match read_dir(&notes_dir) {
+        let notes_files = match read_dir(notes_dir) {
             Ok(files) => files,
 
             Err(err) => {
@@ -132,7 +132,7 @@ impl NotesAction for Notes {
         let notes_dir = get_notes_dir(app);
         let mut notes: Vec<NoteFile> = vec![];
 
-        let notes_files = match read_dir(&notes_dir) {
+        let notes_files = match read_dir(notes_dir) {
             Ok(files) => files,
             Err(err) => {
                 log(LogType::Error, format!("note#find_all() error part: file_read. Error:{:}", err)); 

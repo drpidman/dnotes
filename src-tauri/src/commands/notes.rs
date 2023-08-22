@@ -22,7 +22,7 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, St
     matter.delimiter = "***".to_owned();
 
     let result = matter.parse(note);
-    let data: Notes = result.data.clone().unwrap().deserialize().unwrap();
+    let data: Notes = result.data.unwrap().deserialize().unwrap();
 
     let created_note = Notes::create(&app.app_handle(), data, result.orig).unwrap();
 
@@ -42,7 +42,6 @@ pub async fn find_all_notes(app: tauri::AppHandle) -> Result<String, String> {
         let data: Notes = matter
             .parse(&note.contents)
             .data
-            .clone()
             .unwrap()
             .deserialize()
             .unwrap();
