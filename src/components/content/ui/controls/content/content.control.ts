@@ -50,7 +50,9 @@ export async function note_action_delete(e: MouseEvent, note_name: string) {
 
 	await invoke("delete_note", { note: note_name })
 	.then((_) => {
+		console.log(note_name)
 		notes = notes.filter((note) => note.file_data.file_name != note_name);
+		notesState.update(() => notes);
 	}).catch((err) => {
 		console.log(err);
 	})
