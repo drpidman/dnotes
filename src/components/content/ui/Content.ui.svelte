@@ -5,17 +5,24 @@
 
 	import Tag from 'svelte-material-icons/Tag.svelte';
 	import Book from 'svelte-material-icons/Book.svelte';
-	import { notesState } from '../../../states/notes';
+	import { notesState, searchNotes } from '../../../states/notes';
 	import { Button } from '../../global/styles/Button.style';
-	import { note_action_close, note_action_delete, note_mouse_down, note_mouse_up, to_editor } from './controls/content/content.control';
+	import {
+		note_action_close,
+		note_action_delete,
+		note_mouse_down,
+		note_mouse_up,
+		to_editor
+	} from './controls/content/content.control';
 	import type { Note as TNote } from '../../../types/note.type';
 
 	let notes: TNote[] = [];
+	let search: TNote[] = [];
 
 	notesState.subscribe((value: TNote[]) => {
+		console.log(value);
 		notes = value;
 	});
-
 
 </script>
 

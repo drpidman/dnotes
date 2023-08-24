@@ -1,6 +1,9 @@
 use notesmng::notes::{NoteFile, Notes, NotesAction};
+
+use crate::tools::matter::parse;
+
 use serde::*;
-use tauri::{Manager, Runtime};
+use tauri::Manager;
 
 use gray_matter::engine::YAML;
 use gray_matter::Matter;
@@ -18,14 +21,8 @@ pub async fn create_note(app: tauri::AppHandle, note: &str) -> Result<String, St
         return Err("Note not null".to_string());
     }
 
-    let mut matter = Matter::<YAML>::new();
-    matter.delimiter = "***".to_owned();
-
-    let result = matter.parse(note);
-
-    let data = result.data.unwrap().deserialize().unwrap();
-
-    let created_note = Notes::create(&app.app_handle(), data, result.orig).unwrap();
+    let data = parse(note);
+    let created_note = Notes::create(&app.app_handle(), data.notes, data.result.orig).unwrap();
 
     Ok(serde_json::to_string(&created_note).unwrap())
 }
@@ -61,7 +58,6 @@ pub async fn find_note(app: tauri::AppHandle, note: &str) -> Result<String, Stri
     let found_note = Notes::find_note(&app, note).unwrap();
 
     let mut note_response: Vec<ResponseNote> = vec![];
-
     let mut matter = Matter::<YAML>::new();
     matter.delimiter = "***".to_owned();
 

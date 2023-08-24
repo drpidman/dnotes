@@ -3,14 +3,12 @@ export function format(input_markdown: string): string {
     
     return textTokens
     .map((line) => {
-        const trimLine = line.trim();
-        if (trimLine.startsWith("* ")) {
+        if (line.startsWith("* ")) {
             return '- ' + line.trim().substring(1);
         }
 
-        return trimLine;
+        return line;
     })
-    .filter((line) => line != "")
     .join("\n");
 }
 

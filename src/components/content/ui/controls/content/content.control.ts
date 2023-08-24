@@ -72,5 +72,4 @@ export function note_action_close(e: MouseEvent, noteIndex: number) {
 	setTimeout(() => {
 		pressRecent = false;
 	}, 500)
-
 }

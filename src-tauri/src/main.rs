@@ -5,6 +5,7 @@ use notesmng::notes::{Notes, NotesAction};
 use tauri::Manager;
 
 mod commands;
+mod tools;
 
 fn main() {
     let app = tauri::Builder::default()
