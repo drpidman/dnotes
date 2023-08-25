@@ -51,9 +51,10 @@ impl NotesAction for Notes {
     fn create(app: &AppHandle, note: Notes, content: String) -> Result<Option<NoteFile>, String> {
         log(LogType::Info, format!("note#create() handled:{:?}", note));
         let notes_dir = get_notes_dir(app);
-        // if let Some(find_note) = Notes::find_note(app.clone(), &note.title) {
+        
+        //if let Some(find_note) = Notes::find_note(&app, &note.title) {
         //     return Err(String::from(format!("Note {} already exists", find_note.file_name)));
-        // }
+        //}
 
         let file_name = if cfg!(windows) {
             notes_dir + "\\" + &note.title + ".md"

@@ -72,6 +72,7 @@ export function editor(dom: HTMLElement) {
 	MakeEditor.then((e) => {
 		e.ctx.get(listenerCtx).markdownUpdated((ctx, markdown) => {
 			markdownOutput = format(markdown);
+			console.log(markdownOutput);
 		});
 	});
 }

@@ -28,6 +28,5 @@
 <WindowManager />
 
 <GridLayout args={'--g-flex-direction:row'}>
-	<Sidebar />
 	<Content />
 </GridLayout>
